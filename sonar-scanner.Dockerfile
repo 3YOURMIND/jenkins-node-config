@@ -15,6 +15,6 @@ ENTRYPOINT ../bin/sonar-scanner-$SCANNER_VERSION/bin/sonar-scanner \
     -Dsonar.projectKey=${PROJECT} \
     -Dsonar.sources=${PWD} \
     -Dsonar.host.url=https://sonar.internal.3yourmind.com \
-    -Dsonar.login=${SONAR} \
+    -Dsonar.login=${SONAR_TOKEN} \
     -Dsonar.analysis.scmRevision=${BRANCH_NAME}} \
     -Dsonar.projectVersion="$(cat version)"
