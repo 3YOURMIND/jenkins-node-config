@@ -1,4 +1,4 @@
-FROM openjdk:13-ea-16-jdk-alpine3.9
+FROM openjdk:8u201-jdk-alpine3.9
 ENV SCANNER_VERSION 3.3.0.1492
 ENV PROJECT ""
 ENV SONAR_TOKEN ""
