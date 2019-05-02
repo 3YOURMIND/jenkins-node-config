@@ -5,11 +5,12 @@ ENV SONAR_TOKEN ""
 
 RUN apk add --no-cache git
 
-RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492.zip
-RUN unzip sonar-scanner-cli-3.3.0.1492.zip
+RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SCANNER_VERSION.zip
+RUN mkdir /home/bin
+RUN unzip sonar-scanner-cli-$SCANNER_VERSION.zip -d /home/bin
 
 WORKDIR /home/code
-ENTRYPOINT ../../sonar-scanner-cli-3.3.0.1492/bin/sonar-scanner \
+ENTRYPOINT ../bin/sonar-scanner-$SCANNER_VERSION/bin/sonar-scanner \
     -Dsonar.projectKey=${PROJECT} \
     -Dsonar.sources=${PWD} \
     -Dsonar.host.url=https://sonar.internal.3yourmind.com \
