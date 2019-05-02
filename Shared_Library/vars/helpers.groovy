@@ -1,3 +1,12 @@
+def isTagBuild() {
+  gitOut = sh (
+    script: "git --no-pager describe --exact-match || true",
+    returnStdout: true
+  ).trim()
+
+  return !gitOut.startsWith("fatal:")
+}
+
 def getTagName() {
   gitOut = sh (
     script: "git --no-pager describe --exact-match || true",
@@ -7,7 +16,7 @@ def getTagName() {
   return gitOut.startsWith("fatal:") ? "" : gitOut
 }
 
-def authenticateWithECR(){
+def ECRLogin(){
     sh "eval \$(aws ecr get-login --no-include-email --region eu-central-1)"
 }
 
