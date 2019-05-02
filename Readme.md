@@ -14,3 +14,7 @@ It relies on being provided with the `PROJECT_NAME`, the `SONAR_TOKEN` & the `BR
 
 You can use it wherever you have the docker-cli implemented: 
 `docker run -it -v $(pwd)/.:/home/code -e PROJECT=${PROJECT} -e SONAR_TOKEN=$SONAR_TOKEN -e BRANCH_NAME=${BRANCH_NAME} 3yourmind/sonar-scanner:latest sh`
+
+#### /vars:
+Contains a groovyscript file that is used as shared library between all pipelines.
+It contains useful functions that are used to interact with AWS, git or to publish built images.
