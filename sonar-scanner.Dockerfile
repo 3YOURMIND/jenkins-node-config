@@ -4,7 +4,7 @@ ENV PROJECT ""
 ENV SONAR_TOKEN ""
 ENV BRANCH_NAME ""
 
-RUN apk add --no-cache git nodejs nodejs-npm py3-pip
+RUN apk add --no-cache git nodejs nodejs-npm py3-pip bash
 RUN npm install -g swagger-cli
 RUN pip3 install bandit pycodestyle
 
@@ -13,5 +13,5 @@ RUN mkdir /home/bin
 RUN unzip sonar-scanner-cli-$SCANNER_VERSION.zip -d /home/bin
 
 WORKDIR /home/code
-ENTRYPOINT [ "/bin/ash" ]
-CMD ["ls", "-lah"]
+#ENTRYPOINT [ "/bin/bash" ]
+#CMD ["ls", "-lah"]
