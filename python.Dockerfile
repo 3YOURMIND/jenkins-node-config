@@ -14,8 +14,7 @@ COPY --from=docker-cli /docker/docker /usr/bin/docker
 
 RUN apk add py3-pip curl nodejs nodejs-npm && pip3 install awscli
 RUN pip3 install bandit
-RUN npm install swagger-cli
-RUN python3 --version
+RUN npm install -g swagger-cli
 
 USER jenkins
 
