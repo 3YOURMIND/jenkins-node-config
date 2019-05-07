@@ -21,7 +21,7 @@ def ECRLogin(){
 }
 
 def retagAndPushImage(String project, String branch_name, String tag){
-  if tag != "" {
+  if (tag != "") {
     sh "docker tag ${project}:${branch_name} ${project}:${tag}"
     sh "docker push ${project}:${tag} ${env.ECR_ENDPOINT}/${project}:${tag}"
   } else {
