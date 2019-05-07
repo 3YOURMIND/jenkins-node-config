@@ -20,9 +20,9 @@ def ECRLogin(){
     sh "eval \$(aws ecr get-login --no-include-email --region eu-central-1)"
 }
 
-def retagAndPushImage(String tag){
-  sh "docker tag ${PROJECT}:${BRANCH_NAME} ${env.ECR_ENDPOINT}/${PROJECT}:${tag}"
-  sh "docker push ${env.ECR_ENDPOINT}/${PROJECT}:${tag}"
+def retagAndPushImage(String tag, String project){
+  sh "docker tag ${tag}"
+  sh "docker push ${env.ECR_ENDPOINT}/${project}:${tag}"
 }
 
 return this
