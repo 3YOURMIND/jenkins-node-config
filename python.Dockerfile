@@ -14,7 +14,7 @@ RUN mkdir /usr/bin/sonar-scanner && unzip sonar-scanner-cli-$SCANNER_VERSION.zip
 RUN rm sonar-scanner-cli-$SCANNER_VERSION.zip && rm -r sonar-scanner-${SCANNER_VERSION}
 
 RUN apk add nodejs nodejs-npm py3-pip openjdk8-jre-base
-RUN npm install -g swagger-cli && pip3 install awscli bandit pycodestyle
+RUN npm install -g swagger-cli cowsay && pip3 install awscli bandit pycodestyle
 
 USER jenkins
 
