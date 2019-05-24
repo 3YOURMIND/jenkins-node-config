@@ -5,9 +5,14 @@ ENV DOCKER_VERSION=18.09.5
 
 USER root
 
+# Install the docker engine
 RUN wget "https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz" -O docker.tgz
 RUN tar -xzvf docker.tgz && rm docker.tgz
 RUN cp /home/jenkins/docker/docker /usr/bin/docker
+
+# Download and copy docker-compose into path
+RUN wget "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -O /usr/local/bin/docker-compose
+RUN chmod +x /usr/local/bin/docker-compose
 
 RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SCANNER_VERSION.zip
 RUN mkdir /usr/bin/sonar-scanner && unzip sonar-scanner-cli-$SCANNER_VERSION.zip && cp -r sonar-scanner-${SCANNER_VERSION}/* /usr/bin/sonar-scanner/
