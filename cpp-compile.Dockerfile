@@ -19,16 +19,20 @@ RUN set -x                                                                     &
     rm -rf /var/lib/apt/lists/*
 
 ## Download sources
-ADD https://cmake.org/files/v3.14/cmake-3.14.4.tar.gz /
-ADD https://cmake.org/files/v3.14/cmake-3.14.4-SHA-256.txt /
-ADD https://cmake.org/files/v3.14/cmake-3.14.4-SHA-256.txt.asc /
-ADD https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz / 
-ADD https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz.sig / 
+RUN set -x                                                                     && \
+    curl -LJO https://cmake.org/files/v3.14/cmake-3.14.4.tar.gz                && \
+    curl -LJO https://cmake.org/files/v3.14/cmake-3.14.4-SHA-256.txt           && \
+    curl -LJO https://cmake.org/files/v3.14/cmake-3.14.4-SHA-256.txt.asc       && \
+    curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz         && \
+    curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz.sig     && \ 
+    curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.11.0/ispc-v1.11.0-linux.tar.gz
 
 ENV CMAKE="cmake-3.14.4"
 ENV CMAKE_TGZ="$CMAKE.tar.gz"
 ENV GCC="gcc-9.1.0"
 ENV GCC_TGZ="$GCC.tar.xz"
+ENV ISPC="ispc-v1.11.0-linux"
+ENV ISPC_TGZ="$ISPC.tar.gz"
 
 ## Verify archives gpgs and checksums
 ENV CMAKE_GPG_KEY=EC8FEF3A7BFB4EDA 
@@ -45,6 +49,11 @@ RUN set -x                                                                     &
     sha512sum $GCC_TGZ | grep $GCC_SHA                                         || \
     { echo "could not verify gcc integrity" ; exit 1 ; } 
 
+## Install ispc 1.11.0
+RUN set -x                                                                     && \
+    tar xf $ISPC_TGZ                                                           && \
+    cp -a $ISPC/bin/. /usr/local/bin/                                          && \
+    rm $ISPC $ISPC_TGZ -rf
 
 ## Build gcc 9.1 from source 
 ENV GCC_CONFIG="\
@@ -86,4 +95,5 @@ RUN set -x                                                                     &
 
 RUN set -x                                                                     && \
     gcc --version                                                              && \
-    cmake --version
+    cmake --version                                                            && \
+    ispc --version
