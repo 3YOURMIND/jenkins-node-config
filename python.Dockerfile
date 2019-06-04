@@ -17,7 +17,7 @@ RUN rm sonar-scanner-cli-$SCANNER_VERSION.zip && rm -r sonar-scanner-${SCANNER_V
 RUN apk add --no-cache --virtual .build-deps gcc python3-dev musl-dev libffi-dev openssl-dev libgcc make
 
 RUN apk add nodejs nodejs-npm py3-pip openjdk8-jre-base
-RUN npm install -g swagger-cli cowsay && pip3 install awscli bandit pycodestyle docker-compose
+RUN npm install -g swagger-cli cowsay typedoc@0.14.2 && pip3 install awscli bandit pycodestyle docker-compose
 
 RUN apk --purge del .build-deps
 
