@@ -17,7 +17,7 @@ def getTagName() {
 }
 
 def ECRLogin(){
-    sh "echo \$(aws ecr get-authorization-token --region eu-central-1 --output text --query 'authorizationData[].authorizationToken' | base64 -d | cut -d: -f2) | docker login -u AWS --password-stdin"
+    sh "eval \$(aws ecr get-login --no-include-email --region eu-central-1)"
 }
 
 def retagAndPushImage(String project, String branch_name, String tag){
