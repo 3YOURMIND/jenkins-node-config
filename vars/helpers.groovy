@@ -17,7 +17,7 @@ def getTagName() {
 }
 
 def ECRLogin(){
-    sh "echo $(aws ecr get-authorization-token --region eu-central-1 --output text --query 'authorizationData[].authorizationToken' | base64 -d | cut -d: -f2) | docker login -u AWS https://123456.dkr.ecr.eu-central-1.amazonaws.com --password-stdin"
+    sh "echo \$(aws ecr get-authorization-token --region eu-central-1 --output text --query 'authorizationData[].authorizationToken' | base64 -d | cut -d: -f2) | docker login -u AWS https://123456.dkr.ecr.eu-central-1.amazonaws.com --password-stdin"
 }
 
 def retagAndPushImage(String project, String branch_name, String tag){
