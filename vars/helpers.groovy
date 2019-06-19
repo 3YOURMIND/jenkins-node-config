@@ -13,7 +13,7 @@ def getTagName() {
     returnStdout: true
   ).trim()
 
-  return gitOut.startsWith("fatal:") ? "" : gitOut.replaceAll('/', '-').stripIndent()
+  return gitOut.startsWith("fatal:") ? "" : gitOut
 }
 
 def ECRLogin(){
@@ -22,8 +22,9 @@ def ECRLogin(){
 
 def retagAndPushImage(String project, String branch_name, String tag){
   if (tag != "") {
-    sh "docker tag ${project}:${branch_name} ${env.ECR_ENDPOINT}/${project}:${tag}"
-    sh "docker push ${env.ECR_ENDPOINT}/${project}:${tag}"
+    tag_name = tag.replaceAll('/', '-').stripIndent()
+    sh "docker tag ${project}:${branch_name} ${env.ECR_ENDPOINT}/${project}:${tag_name}"
+    sh "docker push ${env.ECR_ENDPOINT}/${project}:${tag_name}"
   } else {
     sh "docker tag ${project}:${branch_name} ${env.ECR_ENDPOINT}/${project}:${branch_name}"
     sh "docker push ${env.ECR_ENDPOINT}/${project}:${branch_name}"
