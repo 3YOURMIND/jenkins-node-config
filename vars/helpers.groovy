@@ -13,7 +13,7 @@ def getTagName() {
     returnStdout: true
   ).trim()
 
-  return gitOut.startsWith("fatal:") ? "" : gitOut
+  return gitOut.startsWith("fatal:") ? "" : gitOut.replaceAll('/', '-').stripIndent()
 }
 
 def ECRLogin(){
