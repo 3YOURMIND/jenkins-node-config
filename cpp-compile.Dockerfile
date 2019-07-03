@@ -1,4 +1,4 @@
-FROM ubuntu:19.04
+FROM ubuntu:19.04 AS builder
 
 ## Set apt to non-interactive
 ENV DEBIAN_FRONTEND noninteractive
@@ -25,12 +25,16 @@ RUN set -x                                                                     &
     curl -LJO https://cmake.org/files/v3.14/cmake-3.14.4-SHA-256.txt.asc       && \
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz         && \
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz.sig     && \ 
+    curl -LJO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz     && \
+    curl -LJO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz.asc && \
     curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.11.0/ispc-v1.11.0-linux.tar.gz
 
 ENV CMAKE="cmake-3.14.4"
 ENV CMAKE_TGZ="$CMAKE.tar.gz"
 ENV GCC="gcc-9.1.0"
 ENV GCC_TGZ="$GCC.tar.xz"
+ENV BOOST="boost_1_70_0"
+ENV BOOST_TGZ="$BOOST.tar.gz"
 ENV ISPC="ispc-v1.11.0-linux"
 ENV ISPC_TGZ="$ISPC.tar.gz"
 
@@ -38,16 +42,31 @@ ENV ISPC_TGZ="$ISPC.tar.gz"
 ENV CMAKE_GPG_KEY=EC8FEF3A7BFB4EDA 
 ENV GCC_GPG_KEY=33C235A34C46AA3FFB293709A328C3A2C3C45C06
 ENV GCC_SHA=b6134df027e734cee5395afd739fcfa4ea319a6017d662e54e89df927dea19d3fff7a6e35d676685383034e3db01c9d0b653f63574c274eeb15a2cb0bc7a1f28
+ENV BOOST_GPG_KEY=379CE192D401AB61
+ENV BOOST_SHA=882b48708d211a5f48e60b0124cf5863c1534cd544ecd0664bb534a4b5d506e9
 
 RUN set -x                                                                     && \
     gpg --batch --keyserver ha.pool.sks-keyservers.net                         \
-        --recv-keys $GCC_GPG_KEY $CMAKE_GPG_KEY                                && \
+        --recv-keys $GCC_GPG_KEY $CMAKE_GPG_KEY $BOOST_GPG_KEY                 && \
     gpg --batch --verify $CMAKE-SHA-256.txt.asc $CMAKE-SHA-256.txt             && \
     grep $(sha256sum $CMAKE_TGZ) $CMAKE-SHA-256.txt                            ||\
     { echo "could not verify cmake integrity" ; exit 1 ; }                     && \
     gpg --batch --verify $GCC_TGZ.sig $GCC_TGZ                                 && \
     sha512sum $GCC_TGZ | grep $GCC_SHA                                         || \
-    { echo "could not verify gcc integrity" ; exit 1 ; } 
+    { echo "could not verify gcc integrity" ; exit 1 ; }                       && \
+    gpg --batch --verify $BOOST_TGZ.asc $BOOST_TGZ                             && \
+    sha256sum $BOOST_TGZ | grep $BOOST_SHA                                     || \
+    { echo "could not verify boost integrity" ; exit 1 ; }
+
+## Build boost 1.70.0
+RUN set -x                                                                     && \
+    tar xf $BOOST_TGZ                                                          && \
+    cd $BOOST                                                                  && \
+    ./bootstrap.sh --with-libraries=graph,headers,program_options,regex        \
+    --prefix=/usr/local                                                        && \
+    ./b2 install                                                               && \
+    cd ..                                                                      && \
+    rm $BOOST $BOOST_TGZ $BOOST_TGZ.asc -r
 
 ## Install ispc 1.11.0
 RUN set -x                                                                     && \
@@ -96,4 +115,9 @@ RUN set -x                                                                     &
 RUN set -x                                                                     && \
     gcc --version                                                              && \
     cmake --version                                                            && \
-    ispc --version
+    ispc --version                                                             && \
+    rm /tmp/* /var/tmp/* -rf
+
+## Flatten docker layers
+FROM scratch
+COPY --from=builder / /
