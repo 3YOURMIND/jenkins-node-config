@@ -27,7 +27,7 @@ RUN set -x                                                                     &
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz.sig     && \ 
     curl -LJO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz     && \
     curl -LJO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz.asc && \
-    curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.11.0/ispc-v1.11.0-linux.tar.gz
+    curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.10.0/ispc-v1.10.0-linux.tar.gz
 
 ENV CMAKE="cmake-3.14.4"
 ENV CMAKE_TGZ="$CMAKE.tar.gz"
@@ -35,7 +35,7 @@ ENV GCC="gcc-9.1.0"
 ENV GCC_TGZ="$GCC.tar.xz"
 ENV BOOST="boost_1_70_0"
 ENV BOOST_TGZ="$BOOST.tar.gz"
-ENV ISPC="ispc-v1.11.0-linux"
+ENV ISPC="ispc-v1.10.0-linux"
 ENV ISPC_TGZ="$ISPC.tar.gz"
 
 ## Verify archives gpgs and checksums
@@ -68,7 +68,7 @@ RUN set -x                                                                     &
     cd ..                                                                      && \
     rm $BOOST $BOOST_TGZ $BOOST_TGZ.asc -r
 
-## Install ispc 1.11.0
+## Install ispc 1.10.0
 RUN set -x                                                                     && \
     tar xf $ISPC_TGZ                                                           && \
     cp -a $ISPC/bin/. /usr/local/bin/                                          && \
