@@ -27,7 +27,7 @@ RUN set -x                                                                     &
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz.sig     && \ 
     curl -LJO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz     && \
     curl -LJO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz.asc && \
-    curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.10.0/ispc-v1.10.0-linux.tar.gz
+    curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.10.0/ispc-v1.10.0-Linux.tar.gz
 
 ENV CMAKE="cmake-3.14.4"
 ENV CMAKE_TGZ="$CMAKE.tar.gz"
@@ -35,7 +35,7 @@ ENV GCC="gcc-9.1.0"
 ENV GCC_TGZ="$GCC.tar.xz"
 ENV BOOST="boost_1_70_0"
 ENV BOOST_TGZ="$BOOST.tar.gz"
-ENV ISPC="ispc-v1.10.0-linux"
+ENV ISPC="ispc-v1.10.0-Linux"
 ENV ISPC_TGZ="$ISPC.tar.gz"
 
 ## Verify archives gpgs and checksums
@@ -58,23 +58,7 @@ RUN set -x                                                                     &
     sha256sum $BOOST_TGZ | grep $BOOST_SHA                                     || \
     { echo "could not verify boost integrity" ; exit 1 ; }
 
-## Build boost 1.70.0
-RUN set -x                                                                     && \
-    tar xf $BOOST_TGZ                                                          && \
-    cd $BOOST                                                                  && \
-    ./bootstrap.sh --with-libraries=graph,headers,program_options,regex        \
-    --prefix=/usr/local                                                        && \
-    ./b2 install                                                               && \
-    cd ..                                                                      && \
-    rm $BOOST $BOOST_TGZ $BOOST_TGZ.asc -r
-
-## Install ispc 1.10.0
-RUN set -x                                                                     && \
-    tar xf $ISPC_TGZ                                                           && \
-    cp -a $ISPC/bin/. /usr/local/bin/                                          && \
-    rm $ISPC $ISPC_TGZ -rf
-
-## Build gcc 9.1 from source 
+## Build gcc 9.1 from source
 ENV GCC_CONFIG="\
     --build=x86_64-linux-gnu \
     --host=x86_64-linux-gnu \
@@ -98,7 +82,24 @@ RUN set -x                                                                     &
     dpkg-divert --divert /usr/bin/gcc.orig --rename /usr/bin/gcc               && \
     dpkg-divert --divert /usr/bin/g++.orig --rename /usr/bin/g++               && \
     dpkg-divert --divert /usr/bin/gfortran.orig --rename /usr/bin/gfortran     && \
-    update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 999     
+    update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 999        && \
+    update-alternatives --install /usr/bin/c++ c++ /usr/local/bin/g++ 999      && \
+
+## Build boost 1.70.0
+RUN set -x                                                                     && \
+    tar xf $BOOST_TGZ                                                          && \
+    cd $BOOST                                                                  && \
+    ./bootstrap.sh --with-libraries=graph,headers,program_options,regex        \
+    --prefix=/usr/local                                                        && \
+    ./b2 install                                                               && \
+    cd ..                                                                      && \
+    rm $BOOST $BOOST_TGZ $BOOST_TGZ.asc -r
+
+## Install ispc 1.10.0
+RUN set -x                                                                     && \
+    tar xf $ISPC_TGZ                                                           && \
+    cp -a $ISPC/bin/. /usr/local/bin/                                          && \
+    rm $ISPC $ISPC_TGZ -rf
 
 ## Build cmake 3.14.4 from source
 RUN set -x                                                                     && \
