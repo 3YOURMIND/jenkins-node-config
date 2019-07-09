@@ -18,6 +18,7 @@ RUN apk add --no-cache --virtual .build-deps gcc python3-dev musl-dev libffi-dev
 
 RUN apk add nodejs nodejs-npm py3-pip openjdk8-jre-base
 RUN npm install -g swagger-cli cowsay typedoc@0.14.2 && pip3 install awscli bandit pycodestyle docker-compose
+RUN pip3 install ansible
 
 RUN apk --purge del .build-deps
 
