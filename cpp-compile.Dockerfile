@@ -1,4 +1,4 @@
-FROM ubuntu:19.04 AS builder
+FROM ubuntu:18.04 AS builder
 
 ## Set apt to non-interactive
 ENV DEBIAN_FRONTEND noninteractive
@@ -33,13 +33,13 @@ RUN set -x                                                                     &
     curl -LJO https://cmake.org/files/v3.15/${CMAKE}-SHA-256.txt           && \
     curl -LJO https://cmake.org/files/v3.15/${CMAKE}-SHA-256.txt.asc       && \
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz         && \
-    curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz.sig     && \ 
+    curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz.sig     && \
     curl -LJO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz     && \
     curl -LJO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz.asc && \
     curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.10.0/ispc-v1.10.0-linux.tar.gz
 
 ## Verify archives gpgs and checksums
-ENV CMAKE_GPG_KEY=EC8FEF3A7BFB4EDA 
+ENV CMAKE_GPG_KEY=EC8FEF3A7BFB4EDA
 ENV GCC_GPG_KEY=33C235A34C46AA3FFB293709A328C3A2C3C45C06
 ENV GCC_SHA=b6134df027e734cee5395afd739fcfa4ea319a6017d662e54e89df927dea19d3fff7a6e35d676685383034e3db01c9d0b653f63574c274eeb15a2cb0bc7a1f28
 ENV BOOST_GPG_KEY=379CE192D401AB61
@@ -111,7 +111,7 @@ RUN set -x                                                                     &
     make install                                                               && \
     cmake --version                                                            && \
     cd ..                                                                      && \
-    rm $CMAKE $CMAKE_TGZ $CMAKE-SHA* -rf    
+    rm $CMAKE $CMAKE_TGZ $CMAKE-SHA* -rf
 
 RUN set -x                                                                     && \
     gcc --version                                                              && \
