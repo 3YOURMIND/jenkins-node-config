@@ -112,7 +112,6 @@ RUN set -x                                                                     &
     ./configure --parallel=$NPROC                                              && \
     make -j$NPROC                                                              && \
     make install                                                               && \
-    cmake --version                                                            && \
     cd ..                                                                      && \
     rm $CMAKE $CMAKE_TGZ $CMAKE-SHA* -rf  
 
