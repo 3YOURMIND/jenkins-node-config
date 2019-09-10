@@ -38,8 +38,8 @@ RUN set -x                                                                     &
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.1.0/gcc-9.1.0.tar.xz.sig     && \
     curl -LJO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz     && \
     curl -LJO https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz.asc && \
-    curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.10.0/ispc-v1.10.0-linux.tar.gz
     curl -LJO https://github.com/danmar/cppcheck/archive/1.89.tar.gz           && \
+    curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.10.0/ispc-v1.10.0-linux.tar.gz
 
 ## Verify archives gpgs and checksums
 ENV CMAKE_GPG_KEY=EC8FEF3A7BFB4EDA
