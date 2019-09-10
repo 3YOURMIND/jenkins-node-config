@@ -122,8 +122,8 @@ RUN set -x                                                                     &
     mkdir build                                                                && \
     cd build                                                                   && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-flto -march=native" ../ && \
-    cmake --build . --parallel $(nproc) --target install -- --quiet && \       && \
-    cd .. && \
+    cmake --build . --parallel $(nproc) --target install -- --quiet            && \
+    cd ..                                                                      && \
     rm $CPPCHECK $CPPCHECK_TGZ -rf
 
 RUN set -x                                                                     && \
