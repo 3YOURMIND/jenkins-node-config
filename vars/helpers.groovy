@@ -17,7 +17,7 @@ def getTagName() {
 }
 
 def ECRLogin(){
-    sh "eval \$(aws ecr get-login --no-include-email --region eu-central-1)"
+    sh "set +x; eval \$(aws ecr get-login --no-include-email --region eu-central-1) >/dev/null 2>&1"
 }
 
 def retagAndPushImage(String project, String branch_name, String tag){
