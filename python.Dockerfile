@@ -25,3 +25,4 @@ RUN apk --purge del .build-deps
 USER jenkins
 
 ENV USER=jenkins
+ENV NODE_PATH=/usr/local/lib/node
