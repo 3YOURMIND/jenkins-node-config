@@ -11,6 +11,7 @@ ENV OS_DEP "\
       curl \
       gnupg \
       cmake-curses-gui \
+      ccache \
 "
 RUN set -x && \
     apt-get update && \
