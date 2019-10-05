@@ -26,10 +26,10 @@ ENV GCC="gcc-9.2.0"
 ENV GCC_TGZ="${GCC}.tar.xz"
 ENV BOOST="boost_1_71_0"
 ENV BOOST_TGZ="${BOOST}.tar.gz"
-ENV ISPC="ispc-1.12.0-Linux"
-ENV ISPC_TGZ="ispc-v1.12.0-linux.tar.gz"
+ENV ISPC="ispc-v1.12.0-linux"
+ENV ISPC_TGZ="${ISPC}.tar.gz"
 ENV CPPCHECK="cppcheck-1.89"
-ENV CPPCHECK_TGZ="1.89.tar.gz"
+ENV CPPCHECK_TGZ="${CPPCHECK}.tar.gz"
 
 ## Download sources
 RUN set -x && \
@@ -40,7 +40,7 @@ RUN set -x && \
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.2.0/${GCC_TGZ}.sig && \
     curl -LJO https://dl.bintray.com/boostorg/release/1.71.0/source/${BOOST_TGZ} && \
     curl -LJO https://dl.bintray.com/boostorg/release/1.71.0/source/${BOOST_TGZ}.asc && \
-    curl -LJO https://github.com/danmar/cppcheck/archive/${CPPCHECK_TGZ} && \
+    curl -LJO https://github.com/danmar/cppcheck/archive/1.89.tar.gz && \
     curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.12.0/${ISPC_TGZ}
 
 ## Verify archives gpgs and checksums
@@ -96,15 +96,15 @@ RUN set -x && \
 RUN set -x && \
     tar xf $BOOST_TGZ && \
     cd $BOOST && \
-    ./bootstrap.sh --with-libraries=graph,headers,program_options,regex --prefix=/usr/local && \
+    ./bootstrap.sh --without-libraries=python --prefix=/usr/local && \
     ./b2 install && \
     cd .. && \
     rm $BOOST $BOOST_TGZ $BOOST_TGZ.asc -r
 
 ## Install ispc
 RUN set -x && \
-    tar xf $ISPC_TGZ && \
-    cp -a $ISPC/bin/. /usr/local/bin/ && \
+    tar xf ${ISPC_TGZ} && \
+    cp -a ${ISPC}/bin/. /usr/local/bin/ && \
     rm $ISPC $ISPC_TGZ -rf
 
 ## Build cmake from source
@@ -137,5 +137,5 @@ RUN set -x && \
     rm /tmp/* /var/tmp/* -rf
 
 ## Flatten docker layers
-FROM builder
+FROM scratch
 COPY --from=builder / /
