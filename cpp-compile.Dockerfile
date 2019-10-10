@@ -6,19 +6,23 @@ ENV DEBCONF_NONINTERACTIVE_SEEN true
 
 ## Install OS dependencies
 ENV OS_DEP "\
-      build-essential \
+      g++ \
+      make \
+      tar \
+      gzip \
+      xz-utils \
+      binutils \
       ca-certificates \
       curl \
       gnupg \
-      cmake-curses-gui \
       ccache \
+      libncurses5-dev \ # triggers ccmake build during cmake build
 "
 RUN set -x && \
     apt-get update && \
     apt-get install --no-install-recommends -y $OS_DEP && \
-    apt-get clean && \
-    apt-get install -f && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get clean
+    
 
 ENV CMAKE="cmake-3.15.4"
 ENV CMAKE_TGZ="${CMAKE}.tar.gz"
@@ -56,7 +60,7 @@ RUN set -x && \
     gpg --batch --keyserver ha.pool.sks-keyservers.net \
         --recv-keys $GCC_GPG_KEY $CMAKE_GPG_KEY $BOOST_GPG_KEY && \
     gpg --batch --verify $CMAKE-SHA-256.txt.asc $CMAKE-SHA-256.txt && \
-    grep $(sha256sum $CMAKE_TGZ) $CMAKE-SHA-256.txt || \
+    grep $(sha256sum $CMAKE_TGZ) ${CMAKE}-SHA-256.txt || \
         { echo "could not verify cmake integrity" ; exit 1 ; } && \
     gpg --batch --verify $GCC_TGZ.sig $GCC_TGZ && \
     sha512sum $GCC_TGZ | grep $GCC_SHA || \
@@ -81,6 +85,7 @@ RUN set -x && \
     contrib/download_prerequisites && \
     ./configure -v $GCC_CONFIG && \
     make -j$(($(nproc)+1)) && \
+    apt-get purge g++ -y && \
     make install-strip && \
     cd .. && \
     rm $GCC $GCC_TGZ $GCC_TGZ.sig -rf && \
@@ -127,14 +132,14 @@ RUN set -x && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-flto" ../ && \
     cmake --build . --parallel $(nproc) --target install -- --quiet && \
     cd .. && \
-    rm $CPPCHECK $CPPCHECK_TGZ -rf
+    rm ${CPPCHECK} ${CPPCHECK_TGZ} -rf
 
 RUN set -x && \
     gcc --version && \
     cmake --version && \
     ispc --version && \
     cppcheck --version && \
-    rm /tmp/* /var/tmp/* -rf
+    rm /tmp/* /var/tmp/* /var/lib/apt/lists/* -rf
 
 ## Flatten docker layers
 FROM scratch
