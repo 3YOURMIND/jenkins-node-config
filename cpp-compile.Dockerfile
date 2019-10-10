@@ -16,7 +16,7 @@ ENV OS_DEP "\
       curl \
       gnupg \
       ccache \
-      libncurses5-dev \ # triggers ccmake build during cmake build
+      libncurses5-dev \
 "
 RUN set -x && \
     apt-get update && \
