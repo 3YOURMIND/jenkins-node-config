@@ -15,6 +15,7 @@ ENV OS_DEP "\
       ca-certificates \
       curl \
       gnupg \
+      libssl-dev \
       ccache \
       libncurses5-dev \
 "
