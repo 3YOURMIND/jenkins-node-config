@@ -24,7 +24,7 @@ RUN set -x && \
     apt-get clean
     
 
-ENV CMAKE="cmake-3.15.4"
+ENV CMAKE="cmake-3.16.0"
 ENV CMAKE_TGZ="${CMAKE}.tar.gz"
 ENV GCC="gcc-9.2.0"
 ENV GCC_TGZ="${GCC}.tar.xz"
@@ -37,9 +37,9 @@ ENV CPPCHECK_TGZ="${CPPCHECK}.tar.gz"
 
 ## Download sources
 RUN set -x && \
-    curl -LJO https://cmake.org/files/v3.15/${CMAKE_TGZ} && \
-    curl -LJO https://cmake.org/files/v3.15/${CMAKE}-SHA-256.txt && \
-    curl -LJO https://cmake.org/files/v3.15/${CMAKE}-SHA-256.txt.asc && \
+    curl -LJO https://cmake.org/files/v3.16/${CMAKE_TGZ} && \
+    curl -LJO https://cmake.org/files/v3.16/${CMAKE}-SHA-256.txt && \
+    curl -LJO https://cmake.org/files/v3.16/${CMAKE}-SHA-256.txt.asc && \
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.2.0/${GCC_TGZ} && \
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.2.0/${GCC_TGZ}.sig && \
     curl -LJO https://dl.bintray.com/boostorg/release/1.71.0/source/${BOOST_TGZ} && \
@@ -69,7 +69,7 @@ RUN set -x && \
     sha256sum $BOOST_TGZ | grep $BOOST_SHA || \
         { echo "could not verify boost integrity" ; exit 1 ; }
 
-## Build gcc 9.1 from source
+## Build gcc 9.2 from source
 ENV GCC_CONFIG="\
     --build=x86_64-linux-gnu \
     --host=x86_64-linux-gnu \
