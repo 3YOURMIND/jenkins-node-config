@@ -25,7 +25,7 @@ RUN set -x && \
     apt-get clean
     
 
-ENV CMAKE="cmake-3.16.0"
+ENV CMAKE="cmake-3.16.1"
 ENV CMAKE_TGZ="${CMAKE}.tar.gz"
 ENV GCC="gcc-9.2.0"
 ENV GCC_TGZ="${GCC}.tar.xz"
