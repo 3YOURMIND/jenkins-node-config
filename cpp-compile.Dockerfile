@@ -25,11 +25,11 @@ RUN set -x && \
     apt-get clean
     
 
-ENV CMAKE="cmake-3.16.0"
+ENV CMAKE="cmake-3.16.1"
 ENV CMAKE_TGZ="${CMAKE}.tar.gz"
 ENV GCC="gcc-9.2.0"
 ENV GCC_TGZ="${GCC}.tar.xz"
-ENV BOOST="boost_1_71_0"
+ENV BOOST="boost_1_72_0"
 ENV BOOST_TGZ="${BOOST}.tar.gz"
 ENV ISPC="ispc-v1.12.0-linux"
 ENV ISPC_TGZ="${ISPC}.tar.gz"
@@ -43,8 +43,8 @@ RUN set -x && \
     curl -LJO https://cmake.org/files/v3.16/${CMAKE}-SHA-256.txt.asc && \
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.2.0/${GCC_TGZ} && \
     curl -LJO https://ftpmirror.gnu.org/gcc/gcc-9.2.0/${GCC_TGZ}.sig && \
-    curl -LJO https://dl.bintray.com/boostorg/release/1.71.0/source/${BOOST_TGZ} && \
-    curl -LJO https://dl.bintray.com/boostorg/release/1.71.0/source/${BOOST_TGZ}.asc && \
+    curl -LJO https://dl.bintray.com/boostorg/release/1.72.0/source/${BOOST_TGZ} && \
+    curl -LJO https://dl.bintray.com/boostorg/release/1.72.0/source/${BOOST_TGZ}.asc && \
     curl -LJO https://github.com/danmar/cppcheck/archive/1.89.tar.gz && \
     curl -LJO http://sourceforge.net/projects/ispcmirror/files/v1.12.0/${ISPC_TGZ}
 
@@ -53,7 +53,7 @@ ENV CMAKE_GPG_KEY=EC8FEF3A7BFB4EDA
 ENV GCC_GPG_KEY=A328C3A2C3C45C06
 ENV BOOST_GPG_KEY=379CE192D401AB61
 ENV GCC_SHA=a12dff52af876aee0fd89a8d09cdc455f35ec46845e154023202392adc164848faf8ee881b59b681b696e27c69fd143a214014db4214db62f9891a1c8365c040
-ENV BOOST_SHA=96b34f7468f26a141f6020efb813f1a2f3dfb9797ecf76a7d7cbd843cc95f5bd
+ENV BOOST_SHA=c66e88d5786f2ca4dbebb14e06b566fb642a1a6947ad8cc9091f9f445134143f
 
 RUN set -x && \
     mkdir ~/.gnupg && \
@@ -139,7 +139,9 @@ RUN set -x && \
     gcc --version && \
     cmake --version && \
     ispc --version && \
-    cppcheck --version && \
+    cppcheck --version
+
+RUN apt-get purge curl gnupg -y && \
     rm /tmp/* /var/tmp/* /var/lib/apt/lists/* -rf
 
 ## Flatten docker layers
