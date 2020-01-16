@@ -18,6 +18,8 @@ ENV OS_DEP "\
       libssl-dev \
       ccache \
       libncurses5-dev \
+      bison \
+      byacc \
 "
 RUN set -x && \
     apt-get update && \
