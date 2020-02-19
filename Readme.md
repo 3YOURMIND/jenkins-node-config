@@ -1,5 +1,7 @@
 # Jenkins docker swarm-node configs
 
+![build status](https://img.shields.io/docker/cloud/build/3yourmind/jenkins-node-config?style=for-the-badge)
+
 This repo includes Dockerfiles used to provide the necessary dependencies to Jenkins nodes.
 
 #### Dockerfile:
