@@ -2,6 +2,7 @@ FROM jenkins/jnlp-slave:alpine
 
 ENV SCANNER_VERSION 3.3.0.1492
 ENV DOCKER_VERSION=18.09.5
+ENV HELM_VERSION=3.0.3
 
 USER root
 
@@ -22,6 +23,13 @@ RUN npm install typescript
 RUN pip3 install ansible
 
 RUN apk --purge del .build-deps
+
+RUN wget "https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz" -O ./helm.tgz && \
+      tar -xzvf helm.tgz && \
+      mv linux-amd64/helm /usr/bin/helm && \
+      chmod 577 /usr/bin/helm && \
+      helm plugin install "https://github.com/chartmuseum/helm-push" && \
+      rm -rf linux-amd64 helm.tgz
 
 USER jenkins
 
