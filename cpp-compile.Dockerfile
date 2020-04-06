@@ -18,11 +18,16 @@ ENV OS_DEP "\
       libssl-dev \
       ccache \
       libncurses5-dev \
+      python3 \
+      python3-pip \
 "
 RUN set -x && \
     apt-get update && \
     apt-get install --no-install-recommends -y $OS_DEP && \
+    python3 -m pip install lxml &&\
     apt-get clean
+
+COPY ./vars/ctest-to-junit.py /usr/local/bin/ctest-to-junit.py
     
 ENV CMAKE_VERSION="v3.17"
 ENV CMAKE="cmake-3.17.0"
